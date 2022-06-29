@@ -23,7 +23,19 @@ const {
 
 const express = require('express');
 const app = express();
+app.use(express.json());
+app.use((req, res, next) => {
+  console.log("Body:", req.body);
+  next();
+});
 
+app.get('/artists', (req, res, next) => {
+  res.json(getAllArtists());
+});
+
+app.post('/artists', (req, res, next) => {
+  res.status(201).send(req.body);
+});
 // Your code here
 
 const port = 5000;
