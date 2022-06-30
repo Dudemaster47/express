@@ -1,5 +1,5 @@
 // DO NOT EDIT - Initialize Express, handle JSON requests
-const express = require('express');
+const express = require("express");
 const app = express();
 
 app.use(express.json());
@@ -11,7 +11,9 @@ app.use(express.json());
  *     Response: 1.0.0
  */
 // Your code here
-
+app.get("/version", (req, res, next) => {
+  res.send("1.0.0");
+});
 /**
  *  Basic Phase 2 - Route param and JSON response
  *      Method: GET
@@ -24,7 +26,14 @@ app.use(express.json());
  *  combined with the id sent as a route parameter in the url
  */
 // Your code here
-
+app.get("/viewers/:id", (req, res, next) => {
+  res.json({
+    "name": "cherry",
+    "birthdate": "1",
+    "fav movie": "titanic",
+    "id": `${req.params.id}`,
+  });
+});
 /** Basic Phase 3 - Query params in URL
  *      Method: GET
  *      Route: /info
@@ -43,6 +52,45 @@ app.use(express.json());
  *          message required
  */
 // Your code here
+
+// app.get("/info", (req,res,next)=>{
+
+//     if(req.query.message){
+//         res.send(req.query.message)
+//     }else {
+//         res.status(404)
+//         res.send("message required")
+//     }
+ 
+// })
+
+//abstracted middle point
+
+const messageHandler = (req,res,next)=>{
+    if(req.query.message){
+        next();
+       
+    }else {
+        res.status(404);
+        res.send("bad")
+    }
+}
+
+const capital = (req,res,next)=>{
+    if(req.query.message[0]!== req.query.message[0].toUpperCase()){
+        res.status(404);
+        res.send("bad cap")
+       
+    }else {
+        next();
+    }
+}
+app.get("/info", messageHandler, capital, (req,res,next)=>{
+
+        res.send(req.query.message)
+ 
+ 
+})
 
 /**
  *  IMPORTANT: Scroll to the top for basic phases.
@@ -96,5 +144,5 @@ app.use(express.json());
 // Your code here
 
 // DO NOT EDIT - Set port and listener
-const port = 5000;
-app.listen(port, () => console.log('Server is listening on port', port));
+const port = 5002;
+app.listen(port, () => console.log("Server is listening on port", port));
